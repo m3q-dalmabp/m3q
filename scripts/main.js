@@ -144,63 +144,44 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function getSubmission(email) {
-  $.ajax({
-    url: "https://api.typeform.com/forms/fepjH3",
-    method: "GET",
-    crossDomain: true,
-    contentType: 'application/json',
-    dataType: 'jsonp',
-    headers: {
-        "Authorization" : "Bearer " + '9oQ6A1BHkvFioS9zJZf7rM9PKMbxhPjNmQ6NMTujVBiy',
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type':'application/json'
-    },
-    success: function(response) {
-      console.log(response);
-        // var label;
-        // //console.log( response );
+function getSubmission(email, key) {
+  var form_id = "fepjH3" // Current main form id, change for each type
 
-        // // Parsing JSON for answer values by ID
-        // for(var n=0; n<questIDs.length; n++) {
-        //     for(var i=0; i<response.fields.length; i++) {
-        //         //console.log(response.items[0].answers[i].field.id);
-        //         if(response.fields[i].id == questIDs[n]){
-        //             label = response.fields[i].properties.description.substr(1).slice(0, -1);
-        //             //console.log(label);
-        //             $('.result-value[data-answer="'+(n+1)+'"]').prev('.result-text').find('h3').html(label);
-        //             //console.log($('.result-value[data-answer="'+(n+1)+'"]').prev('h3').html());
-        //         }
-        //     }
-        // }
+  // This request will fetch all form questions format
+  $.ajax({
+    url: "answers.php?&form_id=" + form_id + "&key=" + key,
+    method: "GET",
+    contentType: 'application/json',
+    success: function(response) {
+        var label;
+        // Parsing JSON for answer values by ID
+        for(var n=0; n<questIDs.length; n++) {
+            for(var i=0; i<response.fields.length; i++) {
+                if(response.fields[i].id == questIDs[n]){
+                    label = response.fields[i].properties.description.substr(1).slice(0, -1);
+                    $('.result-value[data-answer="'+(n+1)+'"]').prev('.result-text').find('h3').html(label);
+                }
+            }
+        }
     }
   });
 
+  // This request will fetch the answers associated to that email address
   $.ajax({
-      url: "https://api.typeform.com/forms/fepjH3/responses?query="+email,
+      url: "/answers.php?email=" + email + "&form_id=" + form_id + "&key=" + key,
       method: "GET",
-      headers: {
-          "Authorization" : "Bearer " + '9oQ6A1BHkvFioS9zJZf7rM9PKMbxhPjNmQ6NMTujVBiy'
-      },
       success: function(response) {
-          //var ids = [];
-          console.log( response );
-
           // Parsing JSON for answer values by ID
-          // for(var n=0; n<questIDs.length; n++) {
-          //     for(var i=0; i<response.items[0].answers.length; i++) {
-          //         //console.log(response.items[0].answers[i].field.id);
-          //         if(response.items[0].answers[i].field.id == questIDs[n]){
-          //             answers[n] = response.items[0].answers[i].choice.label;
-          //         }
-          //     }
-          // }
-
-          // //console.log( answers );
-          // answers = extractValues(answers);
-          // //console.log( response.items[0].answers );
-          // mainChart(answers);
-          // singleCharts(answers);
+          for(var n=0; n<questIDs.length; n++) {
+              for(var i=0; i<response.items[0].answers.length; i++) {
+                  if(response.items[0].answers[i].field.id == questIDs[n]){
+                      answers[n] = response.items[0].answers[i].choice.label;
+                  }
+              }
+          }
+          answers = extractValues(answers);
+          mainChart(answers);
+          singleCharts(answers);
       }
   });
 }
@@ -214,8 +195,9 @@ function getSubmission(email) {
 // });
 
 var userEmail = getParameterByName('email');
-if(userEmail){
-    getSubmission(userEmail);
+var key = getParameterByName('key');
+if(userEmail && key){
+    getSubmission(userEmail, key);
 }
 
 // mainChart(exResponses);
