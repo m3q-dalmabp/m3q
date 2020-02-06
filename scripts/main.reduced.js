@@ -126,7 +126,7 @@ function getSubmission(email, key) {
 
   // This request will fetch all form questions format
   $.ajax({
-    url: "answers.php?&form_id=" + form_id + "&key=" + key,
+    url: "/m3q/answers.php?&form_id=" + form_id + "&key=" + key,
     method: "GET",
     contentType: 'application/json',
     success: function(response) {
@@ -149,7 +149,7 @@ function getSubmission(email, key) {
   });
 
   $.ajax({
-      url: "/answers.php?email=" + email + "&form_id=" + form_id + "&key=" + key,
+      url: "/m3q/answers.php?email=" + email + "&form_id=" + form_id + "&key=" + key,
       method: "GET",
       success: function(response) {
           // Parsing JSON for answer values by ID
