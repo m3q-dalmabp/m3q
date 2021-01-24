@@ -1,3 +1,4 @@
+
 // AOS plugin init
 AOS.init();
 
@@ -23,7 +24,6 @@ var m3qData = [],
     pointsColors = [],
     percentages = [],
     answers = [],
-    textObject = [],
     labels = [],
     exData = [100,30,80,50,10,80,60,40,20],
     exResponses = [3,3,3,1,1,1,2,2,2,0,0,0,1,2,3,1,1,3,2,2,3,1,1,2,2,2,1];
@@ -44,30 +44,6 @@ function colorPath(el,value) {
         $(el).find("#uno").css('fill', '#F6AF95');
     }
 }
-
-
-
-
-function textsForAnswers(index, answer, texts) {
-  var copyWriting = 'p' + index + 'r' + answer;
-  var tag = 'p' + index ;
-  // console.log(tag);
-  // console.log(copyWriting);
-  var elTag = tag.toString();
-
-  $(document).ready(function(){
-    document.getElementById(elTag).innerHTML = texts[copyWriting]
-  });
-
-  };
-
-  function userNameText(userName, userCompany) {
-    $(document).ready(function(){
-      document.getElementById('user_name_text').innerHTML = `${userName} - ${userCompany}`;
-    })
-  }
-
-
 
 function assignColor(value) {
   var color;
@@ -129,12 +105,10 @@ function singleCharts(array) {
         $('.result-value[data-answer="'+(i+1)+'"]').find('.bar').addClass(elColor).width(wBar+"%");
         //$('.result-value[data-answer="'+(i+1)+'"]').attr("title",wBar);
         // console.log(labels[i]);
-        // $('.result-value[data-answer="'+(i+1)+'"]').prev('p').html(labels[i]);
+        // $('.result-value[data-answer="'+(i+1)+'"]').prev('h3').html(labels[i]);
         // console.log($('.result-value[data-answer="'+(i+1)+'"]').prev('h3').html());
         //console.log($('.result-value[data-answer="'+(i+1)+'"]').prev('h3'));
-
     }
-
 
     // Transform answers in percentage values
     //console.log(m3qData);
@@ -170,65 +144,82 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function getSubmission(uuid, key) {
-  var form_id = "fepjH3"; // Current main form id, change for each type
-
-  const url = 'https://m3q-server.herokuapp.com/';
-  const urlDev = 'http://localhost:5000/';
-  // This request will fetch the answers associated to that email address
+function getSubmission(email) {
   $.ajax({
-      url: urlDev + "results?uuid=" + uuid + "&key=" + key,
-      method: "GET",
-      headers: {"Access-Control-Allow-Origin": "*"},
-      success: function(response) {
-          // Parsing JSON for answer values by ID
-        answers = response;
-        // console.log(answers);
-        if(answers.length = 27) {
-          mainChart(answers);
-          singleCharts(answers);
-          callB(uuid, key);
-          alert('Tus respuestas fueron cargadas correctamente. Cierra esta alerta y baja en la página para ver tus resultados.');
-        } else {
-          alert('Tus respuestas no pudieron ser cargadas. Inténtalo de nuevo, por favor.')
-        }
-      }
-  });
-
-
-}
-function callB(uuid, key) {
-  const url = 'https://m3q-server.herokuapp.com/';
-  const urlDev = 'http://localhost:5000/';
-  $.ajax({
-    url: urlDev + "texts?uuid="+ uuid + "&key=" + key,
+    url: "https://api.typeform.com/forms/fepjH3",
     method: "GET",
-    headers: {"Access-Control-Allow-Origin": "*"},
+    crossDomain: true,
+    contentType: 'application/json',
+    dataType: 'jsonp',
+    headers: {
+        "Authorization" : "Bearer " + '9oQ6A1BHkvFioS9zJZf7rM9PKMbxhPjNmQ6NMTujVBiy',
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type':'application/json'
+    },
     success: function(response) {
-        // Parsing JSON for answer values by ID
-      textsObject = response.responseTexts;
-      // console.log(textsObject);
-      for (i = 0; i < answers.length; i++) {
-        textsForAnswers(i+1, answers[i], textsObject)
-        }
-      const userName = response.userName;
-      const userCompanyName = response.userCompanyName;
-      userNameText(userName, userCompanyName);
+      console.log(response);
+        // var label;
+        // //console.log( response );
 
+        // // Parsing JSON for answer values by ID
+        // for(var n=0; n<questIDs.length; n++) {
+        //     for(var i=0; i<response.fields.length; i++) {
+        //         //console.log(response.items[0].answers[i].field.id);
+        //         if(response.fields[i].id == questIDs[n]){
+        //             label = response.fields[i].properties.description.substr(1).slice(0, -1);
+        //             //console.log(label);
+        //             $('.result-value[data-answer="'+(n+1)+'"]').prev('.result-text').find('h3').html(label);
+        //             //console.log($('.result-value[data-answer="'+(n+1)+'"]').prev('h3').html());
+        //         }
+        //     }
+        // }
     }
   });
+
+  $.ajax({
+      url: "https://api.typeform.com/forms/fepjH3/responses?query="+email,
+      method: "GET",
+      headers: {
+          "Authorization" : "Bearer " + '9oQ6A1BHkvFioS9zJZf7rM9PKMbxhPjNmQ6NMTujVBiy'
+      },
+      success: function(response) {
+          //var ids = [];
+          console.log( response );
+
+          // Parsing JSON for answer values by ID
+          // for(var n=0; n<questIDs.length; n++) {
+          //     for(var i=0; i<response.items[0].answers.length; i++) {
+          //         //console.log(response.items[0].answers[i].field.id);
+          //         if(response.items[0].answers[i].field.id == questIDs[n]){
+          //             answers[n] = response.items[0].answers[i].choice.label;
+          //         }
+          //     }
+          // }
+
+          // //console.log( answers );
+          // answers = extractValues(answers);
+          // //console.log( response.items[0].answers );
+          // mainChart(answers);
+          // singleCharts(answers);
+      }
+  });
 }
 
+// $.ajax({
+//     type: "GET",
+//     headers: {"Access-Control-Allow-Origin": "*"},
+//     url: "https://api.typeform.com/forms/fepjH3"
+// }).done(function (data) {
+//     console.log(data);
+// });
 
-
-var userUuid = getParameterByName('uuid');
-var userEmail = getParameterByName('email')
-var key = getParameterByName('key');
-
-if(userUuid && key){
-    getSubmission(userUuid, key);
+var userEmail = getParameterByName('email');
+if(userEmail){
+    getSubmission(userEmail);
 }
 
+// mainChart(exResponses);
+// singleCharts(exResponses);
 
 
 // PDF variables
@@ -285,10 +276,25 @@ function sendPDF(){
         $('body').removeClass('printpdf');
     });
 
+    // Email.send({
+    //     SecureToken : "da729942-8dc5-4fcc-90a2-d43a824af356",
+    //     To : userEmail,
+    //     From : "m3q-result@dalmabp.com",
+    //     Subject : "This is the subject",
+    //     Body : "This is the subject",
+    //     Attachments : [{
+    //       name : 'm3q_report-'+userEmail+'.pdf',
+    //       path : pdfAsString
+    //     }]
+    // }).then(
+    //   message => alert(message)
+    // );
+
   });
 
 }
 
 $('#pdf-mail').click(function(){
+  //console.log('test');
   sendPDF();
 })
