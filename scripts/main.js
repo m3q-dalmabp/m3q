@@ -201,7 +201,7 @@ function callB(uuid, key) {
   const url = 'https://m3q-server.herokuapp.com/';
   const urlDev = 'http://localhost:5000/';
   $.ajax({
-    url: urlDev + "texts?uuid="+ uuid + "&key=" + key,
+    url: url + "texts?uuid="+ uuid + "&key=" + key,
     method: "GET",
     headers: {"Access-Control-Allow-Origin": "*"},
     success: function(response) {
