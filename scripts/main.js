@@ -177,7 +177,7 @@ function getSubmission(uuid, key) {
   const urlDev = 'http://localhost:5000/';
   // This request will fetch the answers associated to that email address
   $.ajax({
-      url: urlDev + "results?uuid=" + uuid + "&key=" + key,
+      url: url + "results?uuid=" + uuid + "&key=" + key,
       method: "GET",
       headers: {"Access-Control-Allow-Origin": "*"},
       success: function(response) {
