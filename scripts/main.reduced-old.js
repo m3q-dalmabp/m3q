@@ -121,14 +121,13 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function getSubmission(email, key) {
-  var form_id = "D3Yyb5" // Current main form id, change for each type
-
-  // This request will fetch all form questions format
+function getSubmission(email) {
   $.ajax({
-    url: "/m3q/answers.php?&form_id=" + form_id + "&key=" + key,
+    url: "https://api.typeform.com/forms/D3Yyb5",
     method: "GET",
-    contentType: 'application/json',
+    headers: {
+        "Authorization" : "Bearer " + '7ivycDSoFRWyXAkecThrsuXLKDqYtjBt6FpbrqCtwXmB'
+    },
     success: function(response) {
         var label;
         //console.log( response );
@@ -149,9 +148,15 @@ function getSubmission(email, key) {
   });
 
   $.ajax({
-      url: "/m3q/answers.php?email=" + email + "&form_id=" + form_id + "&key=" + key,
+      url: "https://api.typeform.com/forms/D3Yyb5/responses?query="+email,
       method: "GET",
+      headers: {
+          "Authorization" : "Bearer " + '7ivycDSoFRWyXAkecThrsuXLKDqYtjBt6FpbrqCtwXmB'
+      },
       success: function(response) {
+          //var ids = [];
+          console.log( response );
+
           // Parsing JSON for answer values by ID
           for(var n=0; n<questIDs.length; n++) {
               for(var i=0; i<response.items[0].answers.length; i++) {
@@ -172,9 +177,8 @@ function getSubmission(email, key) {
 }
 
 var userEmail = getParameterByName('email');
-var key = getParameterByName('key');
-if(userEmail && key){
-    getSubmission(userEmail, key);
+if(userEmail){
+    getSubmission(userEmail);
 }
 
 // mainChart(exResponses);
