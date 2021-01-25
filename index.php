@@ -31,7 +31,7 @@ require 'sendemail.php';
       </div>
       <div class="header-text float-right">
         <h2 style="text-align: center; color:#455CE1;"><Strong>SEARCH INSIDE YOUR COMPANY</Strong></h2>
-        <strong><p id="user_name_text" style="text-align: center; font-size: 1.5em;"></p></strong>
+        <strong><p id="user_name_text" style="text-align: center; font-size: 1.5em;">Cargando Resultados...</p></strong>
         <p style="text-align: justify;"><strong>Gráfico circular:</strong> evaluación global. Conoce cuáles son las fortalezas, las áreas en desarrollo y las oportunidades de la situación actual de tu organización.</p>
         <p style="text-align: justify;"><strong>Gráficas horizontales:</strong> informe al detalle. Descubre cómo es la situación en cada una de las áreas y sus niveles de desarrollo.</p>
       </div>
