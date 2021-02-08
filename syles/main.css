@@ -4804,17 +4804,17 @@ body.printpdf #chart #tre {
           transition-delay: .8s;
 }
 
-#liderzago #uno {
+#liderazgo #uno {
   -webkit-transition-delay: .5s;
           transition-delay: .5s;
 }
 
-#liderzago #due {
+#liderazgo #due {
   -webkit-transition-delay: .7s;
           transition-delay: .7s;
 }
 
-#liderzago #tre {
+#liderazgo #tre {
   -webkit-transition-delay: .9s;
           transition-delay: .9s;
 }
@@ -4879,17 +4879,17 @@ body.printpdf #chart #tre {
           transition-delay: 1.3s;
 }
 
-#governancia #uno {
+#gobernanza #uno {
   -webkit-transition-delay: 1s;
           transition-delay: 1s;
 }
 
-#governancia #due {
+#gobernanza #due {
   -webkit-transition-delay: 1.2s;
           transition-delay: 1.2s;
 }
 
-#governancia #tre {
+#gobernanza #tre {
   -webkit-transition-delay: 1.4s;
           transition-delay: 1.4s;
 }
