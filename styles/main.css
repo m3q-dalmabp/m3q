@@ -5032,6 +5032,15 @@ body:not(.lite) .legend-wrapper p:last-child:before {
 
 .answer-group--title {
   margin-bottom: 1.4em;
+  -ms-flex-preferred-size: 50%;
+  flex-basis: 50%;
+}
+@media (max-width: 767.98px) {
+  .answer-group--title {
+    margin-bottom: 1.4em;
+    -ms-flex-preferred-size: 100%;
+    flex-basis: 100%;
+  }
 }
 
 body.lite .answer-group p {
@@ -5106,8 +5115,8 @@ body.lite .results-list {
 
 .results-list li .result-text,
 .results-list li > h3 {
-  -ms-flex-preferred-size: 30%;
-      flex-basis: 30%;
+  -ms-flex-preferred-size: 50%;
+      flex-basis: 50%;
 }
 
 .results-list li .result-text {
@@ -5123,6 +5132,7 @@ body.printpdf .results-list li .result-text p {
   body:not(.printpdf) .results-list li .result-text {
     -ms-flex-preferred-size: 38%;
         flex-basis: 38%;
+        text-align: justify;
   }
 }
 
@@ -5143,8 +5153,10 @@ body.printpdf .results-list li .result-text p {
 
 @media (max-width: 767.98px) {
   body:not(.printpdf) .result-value {
-    -ms-flex-preferred-size: 50%;
-        flex-basis: 50%;
+    -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        margin-left: 5%;
+        margin-right: 5%;
   }
 }
 
