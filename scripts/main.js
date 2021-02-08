@@ -234,7 +234,7 @@ if(userUuid && key){
 var element = document.getElementById('m3q');
 var opt = {
   margin:       [0,0.5,0,0.5],
-  pagebreak:    { mode: ['legacy'] },
+  pagebreak:    { mode: ['avoid-all'] },
   filename:     'm3q_report-'+userEmail+'.pdf',
   image:        { type: 'jpeg', quality: 0.98 },
   html2canvas:  { scale: 1 },
