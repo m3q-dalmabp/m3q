@@ -9,7 +9,7 @@ var titles = [
   'Engagement',
   'Cultura del Cambio',
   'Capital humano',
-  'Governancia',
+  'Gobernanza',
   'Eficiencia y agilidad'
 ];
 
@@ -33,7 +33,7 @@ var $lgStrong = $(".legend-strong"),
     $lgLow = $(".legend-low"),
     $lgZero = $(".legend-zero");
 
-var svgItems = ["#equipo","#saludbenestar","#liderzago","#foundations","#engagement","#culturacambio","#capitalhumano","#governancia","#eficiencia"]
+var svgItems = ["#equipo","#saludbenestar","#liderazgo","#foundations","#engagement","#culturacambio","#capitalhumano","#gobernanza","#eficiencia"]
 
 function colorPath(el,value) {
     if( value == 3 ){
@@ -44,9 +44,6 @@ function colorPath(el,value) {
         $(el).find("#uno").css('fill', '#F6AF95');
     }
 }
-
-
-
 
 function textsForAnswers(index, answer, texts) {
   var copyWriting = 'p' + index + 'r' + answer;
@@ -184,6 +181,8 @@ function getSubmission(uuid, key) {
           // Parsing JSON for answer values by ID
         answers = response;
         // console.log(answers);
+
+        // Esta alerta ayuda a que las respuestas aparezcan correctamente en la página. Si se cambia el número de preguntas es importante atualizarla. 
         if(answers.length = 27) {
           mainChart(answers);
           singleCharts(answers);

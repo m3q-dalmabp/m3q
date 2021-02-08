@@ -10,7 +10,7 @@ var titles = [
   'Engagement',
   'Cultura del Cambio',
   'Capital humano',
-  'Governancia',
+  'Gobernanza',
   'Eficiencia y agilidad'
 ];
 
@@ -33,7 +33,7 @@ var $lgStrong = $(".legend-strong"),
     $lgLow = $(".legend-low"),
     $lgZero = $(".legend-zero");
 
-var svgItems = ["#equipo","#saludbenestar","#liderzago","#foundations","#engagement","#culturacambio","#capitalhumano","#governancia","#eficiencia"]
+var svgItems = ["#equipo","#saludbenestar","#liderazgo","#foundations","#engagement","#culturacambio","#capitalhumano","#gobernanza","#eficiencia"]
 
 function colorPath(el,value) {
     if( value == 3 ){
