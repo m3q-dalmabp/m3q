@@ -1,6 +1,9 @@
-// AOS plugin init
+// This script updates the information on the M3Q Results page
+
+// Animate On Scroll plugin init 
 AOS.init();
 
+// This array corresponds with the tags that are evaluated (This is used on the labels chart that categorizes each area)
 var titles = [
   'Equipo',
   'Salud y Bienestar',
@@ -13,28 +16,26 @@ var titles = [
   'Eficiencia y agilidad'
 ];
 
+// This array corresponds with the ID for the values of each response
 var questIDs = ["GjZDxIWoitHN", "vHMsURMZG6OH", "jYrB63LOG14O", "Br4ZYLekorFP", "Xhv6eCVDoz72", "wMJmJyPzmQYq", "Q9Opyui1HYXS", "BiNDYgL6pijY", "RQcikfxqnZAM", "hc3VAxHesd6e", "QbWdWlaB6WiB", "oAFijsOTsBSB", "Vsnk5SUFoes6", "qh2xtO25fFcY", "CTq9eh0oGTUS", "A6ng25Gj39Bb", "aeWEGlBHNDMS", "kfQpbN5VbBsy", "shitJPiYNY5u", "H4r9pNIb6nEw", "KhhCWMwoK6jG", "ET5HUcq3sMZL", "n9PZvY4rVe99", "rCIV2QLNt7zc", "hDzFIlUxCBi9", "hTcrVpRYPUfk", "aqmD7IzJfLQf"];
 
-//var colors = ['rgba(132,191,136, 0.3)', 'rgba(255, 241, 175, 0.3)', 'rgba(248, 170, 143, 0.3)'];
-//var colors = [chartContext.createPattern(patternCanvas, 'repeat'), 'rgba(255, 241, 175, 0.3)', 'rgba(248, 170, 143, 0.3)'];
-
+// Declaring variables for the arrays used
 var m3qData = [],
     m3qData9 = [],
     pointsColors = [],
-    percentages = [],
     answers = [],
     textObject = [],
-    labels = [],
-    exData = [100,30,80,50,10,80,60,40,20],
-    exResponses = [3,3,3,1,1,1,2,2,2,0,0,0,1,2,3,1,1,3,2,2,3,1,1,2,2,2,1];
 
+// This is for Jquey Manipulation of the text labels
 var $lgStrong = $(".legend-strong"),
     $lgMed = $(".legend-med"),
     $lgLow = $(".legend-low"),
     $lgZero = $(".legend-zero");
 
+// This array corresponds with the tags on the SVG for the main (circular) graph
 var svgItems = ["#equipo","#saludbenestar","#liderazgo","#foundations","#engagement","#culturacambio","#capitalhumano","#gobernanza","#eficiencia"]
 
+// This function changes the colors of the figures labeled #tre, #due and #uno inside the ciruclar SVG based on values of answers
 function colorPath(el,value) {
     if( value == 3 ){
         $(el).find("#tre, #due, #uno").css('fill', '#8EBE82');
@@ -45,11 +46,10 @@ function colorPath(el,value) {
     }
 }
 
+// This function assigns texts to the P tags, based on their ID and the user's answer
 function textsForAnswers(index, answer, texts) {
   var copyWriting = 'p' + index + 'r' + answer;
   var tag = 'p' + index ;
-  // console.log(tag);
-  // console.log(copyWriting);
   var elTag = tag.toString();
 
   $(document).ready(function(){
@@ -58,6 +58,7 @@ function textsForAnswers(index, answer, texts) {
 
   };
 
+  // This function adds the users name and company to the corresponding tag on the html
   function userNameText(userName, userCompany) {
     $(document).ready(function(){
       document.getElementById('user_name_text').innerHTML = `${userName} - ${userCompany}`;
@@ -65,7 +66,7 @@ function textsForAnswers(index, answer, texts) {
   }
 
 
-
+// This function assigns colors based on a numeric value (1,2,3)
 function assignColor(value) {
   var color;
   if( value == 3 ){
@@ -78,9 +79,14 @@ function assignColor(value) {
   return color;
 }
 
+// This vars are used for the PDF print
+
 var chartSize;
+
 var orChartSize = 546;
-function resizeChart(array) {
+
+// This function resizes the main chart based on the window width and is also used for the PDF Print
+function resizeChart() {
     winW = $(window).width();
     if(winW > 1023){
       chartSize = parseInt(winW)*0.60;
@@ -91,56 +97,40 @@ function resizeChart(array) {
     $('#chart').height(chartSize);
     $('#chart').css('visibility', 'visible');
 }
+// Calling resize main chart function
 resizeChart();
 
-function extractValues(array) {
-  for(i=0; i<array.length; i++){
-    array[i] = parseInt(array[i].split('.')[0]);
-  }
-  //console.log(array);
-  return array;
-}
-
+// This fuction controls the main chart and 
 function mainChart(array) {
-    // Get avarage percentage values
-    for( i=0, b=0; i<array.length; i+=3, b++){
+    // Loop for getting avarage percentage values
+    for(i=0, b=0; i<array.length; i+=3, b++){
         m3qData[b] = Math.round( (array[i]+array[i+1]+array[i+2])/3 );
         m3qData9[b] = array[i]+array[i+1]+array[i+2];
-        //console.log(m3qData[b] + " " + m3qData9[b]);
     }
-    //console.log(m3qData);
-
-    for( i=0; i<svgItems.length; i++){
+    // Loop for assigining colors with colorPath function to the main graphs figures
+    for(i=0; i<svgItems.length; i++){
         colorPath(svgItems[i], m3qData[i]);
     }
 }
 
+// This function colors the single charts and each area
 function singleCharts(array) {
     var wBar, elColor;
 
-    // Transform answers in percentage values
+    // Transforming answers in percentage values for single charts and coloring them
     for( i=0; i<array.length; i++) {
         wBar = array[i]*33.33;
         elColor = assignColor(array[i]);
-        //console.log(wBar + " " + elColor);
         $('.result-value[data-answer="'+(i+1)+'"]').find('.bar').addClass(elColor).width(wBar+"%");
-        //$('.result-value[data-answer="'+(i+1)+'"]').attr("title",wBar);
-        // console.log(labels[i]);
-        // $('.result-value[data-answer="'+(i+1)+'"]').prev('p').html(labels[i]);
-        // console.log($('.result-value[data-answer="'+(i+1)+'"]').prev('h3').html());
-        //console.log($('.result-value[data-answer="'+(i+1)+'"]').prev('h3'));
-
     }
 
-
-    // Transform answers in percentage values
-    //console.log(m3qData);
+    // Transforming answers in percentage values for average(area) charts and coloring them
     for( n=0; n<m3qData.length; n++) {
         wBar = m3qData9[n]*11.11;
         elColor = assignColor(m3qData[n]);
         $('.result-value[data-groupaverage="'+(n+1)+'"]').find('.bar').addClass(elColor).width(wBar+"%");
-        //$('.result-value[data-groupaverage="'+(n+1)+'"]').attr("title",wBar+"%");
 
+    // This conditional logic adds the area labels to the table that shows Strong - Medium - Low and Not Contamplated areas
         if(elColor == "green") {
             $lgStrong.append("<span>" + titles[n] + "</span> ");
             //console.log(titles[n]);
@@ -153,10 +143,10 @@ function singleCharts(array) {
         }
     }
 
-    //$('[data-toggle="tooltip"]').tooltip();
 
 }
 
+// This fuction gets the users data from the URL
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -167,11 +157,11 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
+// This function calls the API and gets the results for the user based on the params given as arguments
 function getSubmission(uuid, key) {
-  var form_id = "fepjH3"; // Current main form id, change for each type
 
   const url = 'https://m3q-server.herokuapp.com/';
-  const urlDev = 'http://localhost:5000/';
+  // const urlDev = 'http://localhost:5000/';
   // This request will fetch the answers associated to that email address
   $.ajax({
       url: url + "results?uuid=" + uuid + "&key=" + key,
@@ -182,11 +172,13 @@ function getSubmission(uuid, key) {
         answers = response;
         // console.log(answers);
 
-        // Esta alerta ayuda a que las respuestas aparezcan correctamente en la página. Si se cambia el número de preguntas es importante atualizarla. 
         if(answers.length = 27) {
+          // Calling mainChart and singleChart functions with the acquired answers.
           mainChart(answers);
           singleCharts(answers);
-          callB(uuid, key);
+          // Calling the second API call (texts) function
+          getTexts(uuid, key);
+          // This alerts forces the page to load the colopaths, texts and such. Length should be updated if more questions are added
           alert('Tus respuestas fueron cargadas correctamente. Cierra esta alerta y baja en la página para ver tus resultados.');
         } else {
           alert('Tus respuestas no pudieron ser cargadas. Inténtalo de nuevo, por favor.')
@@ -194,22 +186,23 @@ function getSubmission(uuid, key) {
       }
   });
 
-
 }
-function callB(uuid, key) {
+
+// This function calls the API and receives, the texts for each answer, as well as the users name and company
+function getTexts(uuid, key) {
   const url = 'https://m3q-server.herokuapp.com/';
-  const urlDev = 'http://localhost:5000/';
+  // const urlDev = 'http://localhost:5000/';
   $.ajax({
     url: url + "texts?uuid="+ uuid + "&key=" + key,
     method: "GET",
     headers: {"Access-Control-Allow-Origin": "*"},
     success: function(response) {
-        // Parsing JSON for answer values by ID
       textsObject = response.responseTexts;
-      // console.log(textsObject);
+
       for (i = 0; i < answers.length; i++) {
         textsForAnswers(i+1, answers[i], textsObject)
         }
+      
       const userName = response.userName;
       const userCompanyName = response.userCompanyName;
       userNameText(userName, userCompanyName);
@@ -230,7 +223,7 @@ if(userUuid && key){
 
 
 
-// PDF variables
+// PDF variables for PDF Creation
 var element = document.getElementById('m3q');
 var opt = {
   margin:       [0,0.5,0,0.5],
@@ -241,53 +234,19 @@ var opt = {
   jsPDF:        { unit: 'in', orientation: 'landscape', compressPDF: true }
 };
 
+// This function creates a PDF file from the Results HTML
 function createPDF(){
   $('body').addClass('printpdf');
   $('#chart').width(orChartSize);
   $('#chart').height(orChartSize);
 
-  // New Promise-based usage:
   html2pdf().set(opt).from(element).save().then(function(pdf){
     resizeChart();
     $('body').removeClass('printpdf');
   });;
 }
 
+// Jquery onClick for the PDF Creation Button
 $('#pdf-creatiion').click(function(){
-  //console.log('test');
   createPDF();
-})
-
-function sendPDF(){
-  $('body').addClass('printpdf');
-  $('#chart').width(orChartSize);
-  $('#chart').height(orChartSize);
-
-  html2pdf().set(opt).from(element).toPdf().output('datauri').then(function (pdfAsString) {
-    // The PDF has been converted to a Data URI string and passed to this function.
-    // Use pdfAsString however you like (send as email, etc)! For instance:
-    //console.log(pdfAsString);
-
-    var $button = $('#pdf-mail');
-    $.ajax({
-        type: 'POST',
-        url: "sendemail.php",
-        data: {
-            //Name: $("#name").val(),
-            Email: userEmail,
-            //Message: $("#message").val(),
-            Attachment: pdfAsString
-        }
-    }).done(function(data) {
-        $button.html('Email Sent!').delay(3210);
-        resizeChart();
-        $('body').removeClass('printpdf');
-    });
-
-  });
-
-}
-
-$('#pdf-mail').click(function(){
-  sendPDF();
 })
