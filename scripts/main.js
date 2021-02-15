@@ -24,7 +24,7 @@ var m3qData = [],
     m3qData9 = [],
     pointsColors = [],
     answers = [],
-    textObject = [],
+    textObject = [];
 
 // This is for Jquey Manipulation of the text labels
 var $lgStrong = $(".legend-strong"),
